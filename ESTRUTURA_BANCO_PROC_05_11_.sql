@@ -1,0 +1,692 @@
+SET time_zone = "-03:00";
+CREATE DATABASE usjt;
+USE usjt;
+
+SET SQL_SAFE_UPDATES = 0;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ATENDIMENTO`
+--
+
+CREATE TABLE IF NOT EXISTS `ATENDIMENTO` (
+  `COD_ATENDIMENTO` int(11) NOT NULL AUTO_INCREMENT,
+  `COD_CATEGORIA` int(11) NOT NULL,
+  `HORA_CHECKIN` datetime DEFAULT NULL,
+  `HORA_CHECKOUT` datetime DEFAULT NULL,
+  `PREVISAO_CHECKOUT` datetime DEFAULT NULL,
+  `HORA_ATENDIMENTO` datetime DEFAULT NULL,
+  `NOME_RESPONSAVEL` varchar(100) DEFAULT NULL,
+  `DATA_EVENTO` date DEFAULT NULL,
+  `STATUS_ATENDIMENTO` varchar(50) DEFAULT NULL,
+  `TELEFONE` varchar(15) DEFAULT NULL,
+  `COD_RESERVA` int(11) DEFAULT NULL,
+  `QTD_PESSOAS` int(11) DEFAULT NULL,
+  `DIA_SEMANA` int(1) NOT NULL,
+  PRIMARY KEY (`COD_ATENDIMENTO`),
+  KEY `COD_RESERVA` (`COD_RESERVA`),
+  KEY `DIA_SEMANA` (`DIA_SEMANA`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `CATEGORIA`
+--
+
+CREATE TABLE IF NOT EXISTS `CATEGORIA` (
+  `COD_CATEGORIA` int(11) NOT NULL AUTO_INCREMENT,
+  `NOME_CATEGORIA` varchar(80) NOT NULL,
+  `DE` INT NOT NULL,
+  `ATE` INT NOT NULL,
+  PRIMARY KEY (`COD_CATEGORIA`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+INSERT INTO `CATEGORIA` (`COD_CATEGORIA`, `NOME_CATEGORIA`,`DE`, `ATE`) VALUES
+(1, 'Refeição Rápida',1,1),
+(2, 'Almoço Executivo', 2, 5),
+(3, 'Jantar Executivo', 2, 5),
+(4, 'Almoço Familiar',4, 8),
+(5, 'Jantar Familiar', 4, 8),
+(6, 'Aniversário', 6, 8),
+(7, 'Happy Hour', 9, 1000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `DATA_COMEMORATIVA`
+--
+
+CREATE TABLE IF NOT EXISTS `DATA_COMEMORATIVA` (
+  `COD_DATA_COMEMORATIVA` int(11) NOT NULL AUTO_INCREMENT,
+  `COD_TIPO_DATA_COMEMORATIVA` int(11) DEFAULT NULL,
+  `NOME_DATA_COMEMORATIVA` varchar(80) DEFAULT NULL,
+  `DATA_COMEMORATIVA` date DEFAULT NULL,
+  `COD_DIA_SEMANA` int(11) DEFAULT NULL,
+  `PESO` int(11) DEFAULT NULL,
+  PRIMARY KEY (`COD_DATA_COMEMORATIVA`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `DATA_COMEMORATIVA`
+--
+
+INSERT INTO `DATA_COMEMORATIVA` (`COD_DATA_COMEMORATIVA`, `COD_TIPO_DATA_COMEMORATIVA`, `NOME_DATA_COMEMORATIVA`, `DATA_COMEMORATIVA`, `COD_DIA_SEMANA`, `PESO`) VALUES
+(1, 1, 'Confraternização Universal(Ano novo)', '2016-01-01', 6, -1),
+(2, 2, 'Paixão de Cristo', '2016-03-25', 6, 1),
+(3, 3, 'Páscoa', '2016-03-27', 1, 0),
+(4, 4, 'Tiradentes', '2016-04-21', 5, 0),
+(5, 5, 'Dia do Trabalho', '2016-05-01', 1, 0),
+(6, 6, 'Corpus Christi', '2016-05-26', 5, 0),
+(7, 7, 'Independência do Brasil', '2016-09-07', 4, 0),
+(8, 8, 'Nossa Senhora da Aparecida', '2016-10-12', 4, 0),
+(9, 9, 'Finados', '2016-11-02', 4, 0),
+(10, 10, 'Proclamação da República', '2016-11-15', 3, 0),
+(11, 11, 'Natal', '2016-12-25', 1, -1),
+(12, 12, 'Carnaval (Ponto Facultativo)', '2016-02-09', 3, 0),
+(13, 13, 'Domingo de Ramos', '2016-03-20', 1, 0),
+(14, 14, 'Sábado de Aleluia', '2016-03-26', 7, 0),
+(15, 15, 'Dia das Mães', '2016-05-08', 1, 2),
+(16, 16, 'Dia dos Namorados', '2016-06-12', 1, 2),
+(17, 17, 'Dia das Crianças', '2016-10-12', 4, 0),
+(18, 18, 'Dia dos Pais', '2016-08-14', 1, 2),
+(19, 1, 'Confraternização Universal(Ano Novo)', '2017-01-01', 1, -1),
+(20, 2, 'Paixão de Cristo', '2017-04-14', 6, 1),
+(21, 3, 'Páscoa', '2017-04-16', 1, 0),
+(22, 4, 'Tiradentes', '2017-04-21', 6, 1),
+(23, 5, 'Dia do Trabalho', '2017-05-01', 2, 0),
+(24, 6, 'Corpus Christi', '2017-06-15', 5, 0),
+(25, 7, 'Independência do Brasil', '2017-09-07', 5, 0),
+(26, 8, 'Nossa Senhora da Aparecida', '2017-10-12', 5, 0),
+(27, 9, 'Finados', '2017-11-02', 5, 0),
+(28, 10, 'Proclamação da República', '2017-11-15', 4, 0),
+(29, 11, 'Natal', '2017-12-25', 2, -1),
+(30, 12, 'Carnaval (Ponto Facultativo)', '2017-02-28', 3, 0),
+(31, 13, 'Domingo de Ramos', '2017-04-09', 1, 0),
+(32, 14, 'Sábado de Aleluia', '2017-04-15', 7, 0),
+(33, 15, 'Dia das Mães', '2017-05-14', 1, 2),
+(34, 16, 'Dia dos Namorados', '2017-06-12', 2, 2),
+(35, 17, 'Dia das Crianças', '2017-10-12', 5, 0),
+(36, 18, 'Dia dos Pais', '2017-08-13', 1, 2),
+(37, 1, 'Confraternização Universal(Ano Novo)', '2018-01-01', 2, -1),
+(38, 2, 'Paixão de Cristo', '2018-03-30', 6, 1),
+(39, 3, 'Páscoa', '2018-04-01', 1, 0),
+(40, 4, 'Tiradentes', '2018-04-21', 7, 0),
+(41, 5, 'Dia do Trabalho', '2018-05-01', 3, 0),
+(42, 6, 'Corpus Christi', '2018-05-31', 5, 0),
+(43, 7, 'Independência do Brasil', '2018-09-07', 6, 1),
+(44, 8, 'Nossa Senhora da Aparecida', '2018-10-12', 6, 1),
+(45, 9, 'Finados', '2018-11-02', 6, 1),
+(46, 10, 'Proclamação da República', '2018-11-15', 5, 0),
+(47, 11, 'Natal', '2018-11-25', 1, -1),
+(48, 12, 'Carnaval (Ponto Facultativo)', '2018-02-13', 3, 0),
+(49, 13, 'Domingo de Ramos', '2018-03-25', 1, 0),
+(50, 14, 'Sábado de Aleluia', '2018-03-31', 7, 0),
+(51, 15, 'Dia das Mães', '2018-05-13', 1, 2),
+(52, 16, 'Dia dos Namorados', '2018-06-12', 3, 2),
+(53, 17, 'Dia das Crianças', '2018-10-12', 6, 1),
+(54, 18, 'Dia dos Pais', '2018-08-12', 1, 2),
+(55, 1, 'Confraternização Universal(Ano Novo)', '2019-01-01', 3, -1),
+(56, 2, 'Paixão de Cristo', '2019-04-19', 6, 1),
+(57, 3, 'Páscoa', '2019-04-21', 1, 0),
+(58, 4, 'Tiradentes', '2019-04-21', 1, 0),
+(59, 5, 'Dia do Trabalho', '2019-05-01', 4, 0),
+(60, 6, 'Corpus Christi', '2019-06-20', 5, 0),
+(61, 7, 'Independência do Brasil', '2019-09-07', 7, 0),
+(62, 8, 'Nossa Senhora da Aparecida', '2019-10-12', 7, 0),
+(63, 9, 'Finados', '2019-11-02', 7, 0),
+(64, 10, 'Proclamação da República', '2019-11-15', 6, 1),
+(65, 11, 'Natal', '2019-12-25', 4, -1),
+(66, 12, 'Carnaval (Ponto Facultativo)', '2019-03-05', 3, 0),
+(67, 13, 'Domingo de Ramos', '2019-04-14', 1, 0),
+(68, 14, 'Sábado de Aleluia', '2019-04-20', 7, 0),
+(69, 15, 'Dia das Mães', '2019-05-12', 1, 2),
+(70, 16, 'Dia dos Namorados', '2019-06-12', 4, 2),
+(71, 17, 'Dia das Crianças', '2019-10-12', 7, 0),
+(72, 18, 'Dia dos Pais', '2019-08-11', 1, 2),
+(73, 1, 'Confraternização Universal(Ano Novo)', '2020-01-01', 4, -1),
+(74, 2, 'Paixão de Cristo', '2020-04-10', 6, 1),
+(75, 3, 'Páscoa', '2020-04-12', 1, 0),
+(76, 4, 'Tiradentes', '2020-04-21', 3, 0),
+(77, 5, 'Dia do Trabalho', '2020-05-01', 6, 1),
+(78, 6, 'Corpus Christi', '2020-06-11', 5, 0),
+(79, 7, 'Independência do Brasil', '2020-09-07', 2, 0),
+(80, 8, 'Nossa Senhora da Aparecida', '2020-10-12', 2, 0),
+(81, 9, 'Finados', '2020-11-02', 2, 0),
+(82, 10, 'Proclamação da República', '2020-11-15', 1, 0),
+(83, 11, 'Natal', '2020-12-25', 6, -1),
+(84, 12, 'Carnaval (Ponto Facultativo)', '2020-02-25', 3, 0),
+(85, 13, 'Domingo de Ramos', '2020-04-05', 1, 0),
+(86, 14, 'Sábado de Aleluia', '2020-04-11', 7, 0),
+(87, 15, 'Dia das Mães', '2020-05-10', 1, 2),
+(88, 16, 'Dia dos Namorados', '2020-06-12', 6, 2),
+(89, 17, 'Dia das Crianças', '2020-08-12', 4, 0),
+(90, 18, 'Dia dos Pais', '2020-08-09', 1, 2),
+(91, 1, 'Confraternização Universal(Ano Novo)', '2021-01-01', 6, -1),
+(92, 2, 'Paixão de Cristo', '2021-04-02', 6, 1),
+(93, 3, 'Páscoa', '2021-04-04', 1, 0),
+(94, 4, 'Tiradentes', '2021-04-21', 4, 0),
+(95, 5, 'Dia do Trabalho', '2021-05-01', 7, 0),
+(96, 6, 'Corpus Christi', '2021-06-03', 5, 0),
+(97, 7, 'Independência do Brasil', '2021-09-07', 3, 0),
+(98, 8, 'Nossa Senhora da Aparecida', '2021-10-12', 3, 0),
+(99, 9, 'Finados', '2021-11-02', 3, 0),
+(100, 10, 'Proclamação da República', '2021-11-15', 2, 0),
+(101, 11, 'Natal', '2021-12-25', 7, -1),
+(102, 12, 'Carnaval (Ponto Facultativo)', '2021-02-16', 3, 0),
+(103, 13, 'Domingo de Ramos', '2021-03-28', 1, 0),
+(104, 14, 'Sábado de Aleluia', '2021-04-03', 7, 0),
+(105, 15, 'Dia das Mães', '2021-05-09', 1, 2),
+(106, 16, 'Dia dos Namorados', '2021-06-12', 7, 2),
+(107, 17, 'Dia das Crianças', '2021-10-12', 3, 0),
+(108, 18, 'Dia dos Pais', '2020-08-08', 7, 2),
+(109, 1, 'Confraternização Universal(Ano Novo)', '2022-01-01', 7, -1),
+(110, 2, 'Paixão de Cristo', '2022-04-15', 6, 1),
+(111, 3, 'Páscoa', '2022-04-17', 1, 0),
+(112, 4, 'Tiradentes', '2022-04-21', 5, 0),
+(113, 5, 'Dia do Trabalho', '2022-05-01', 1, 0),
+(114, 6, 'Corpus Christi', '2022-06-16', 5, 0),
+(115, 7, 'Independência do Brasil', '2022-09-07', 4, 0),
+(116, 8, 'Nossa Senhora da Aparecida', '2022-10-12', 4, 0),
+(117, 9, 'Finados', '2022-11-02', 4, 0),
+(118, 10, 'Proclamação da República', '2022-11-15', 3, 0),
+(119, 11, 'Natal', '2022-12-25', 1, -1),
+(120, 12, 'Carnaval (Ponto Facultativo)', '2022-03-01', 3, 0),
+(121, 13, 'Domingo de Ramos', '2022-04-10', 1, 0),
+(122, 14, 'Sábado de Aleluia', '2022-04-16', 7, 0),
+(123, 15, 'Dia das Mães', '2022-05-08', 1, 2),
+(124, 16, 'Dia dos Namorados', '2022-06-12', 1, 2),
+(125, 17, 'Dia das Crianças', '2022-10-12', 4, 0),
+(126, 18, 'Dia dos Pais', '2022-08-14', 1, 2),
+(127, 1, 'Confraternização Universal(Ano Novo)', '2023-01-01', 1, -1),
+(128, 2, 'Paixão de Cristo', '2023-04-07', 6, 1),
+(129, 3, 'Páscoa', '2023-04-09', 1, 0),
+(130, 4, 'Tiradentes', '2023-04-21', 6, 1),
+(131, 5, 'Dia do Trabalho', '2023-05-01', 2, 0),
+(132, 6, 'Corpus Christi', '2023-06-08', 5, 0),
+(133, 7, 'Independência do Brasil', '2023-09-07', 5, 0),
+(134, 8, 'Nossa Senhora da Aparecida', '2023-10-12', 5, 0),
+(135, 9, 'Finados', '2023-11-02', 5, 0),
+(136, 10, 'Proclamação da República', '2023-11-15', 4, 0),
+(137, 11, 'Natal', '2023-12-25', 2, -1),
+(138, 12, 'Carnaval (Ponto Facultativo)', '2023-02-21', 3, 0),
+(139, 13, 'Domingo de Ramos', '2023-04-02', 1, 0),
+(140, 14, 'Sábado de Aleluia', '2023-04-08', 7, 0),
+(141, 15, 'Dia das Mães', '2023-05-14', 1, 2),
+(142, 16, 'Dia dos Namorados', '2023-06-12', 2, 2),
+(143, 17, 'Dia das Crianças', '2023-10-12', 5, 0),
+(144, 18, 'Dia dos Pais', '2023-08-13', 1, 2),
+(145, 1, 'Confraternização Universal(Ano Novo)', '2024-01-01', 2, -1),
+(146, 2, 'Paixão de Cristo', '2024-03-29', 6, 1),
+(147, 3, 'Páscoa', '2024-03-31', 1, 0),
+(148, 4, 'Tiradentes', '2024-04-21', 1, 0),
+(149, 5, 'Dia do Trabalho', '2024-05-01', 4, 0),
+(150, 6, 'Corpus Christi', '2024-05-30', 5, 0),
+(151, 7, 'Independência do Brasil', '2024-09-07', 7, 0),
+(152, 8, 'Nossa Senhora da Aparecida', '2024-10-12', 7, 0),
+(153, 9, 'Finados', '2024-11-02', 7, 0),
+(154, 10, 'Proclamação da República', '2024-11-15', 6, 1),
+(155, 11, 'Natal', '2024-12-25', 4, -1),
+(156, 12, 'Carnaval (Ponto Facultativo)', '2024-02-13', 3, 0),
+(157, 13, 'Domingo de Ramos', '2024-03-24', 1, 0),
+(158, 14, 'Sábado de Aleluia', '2024-03-30', 7, 0),
+(159, 15, 'Dia das Mães', '2024-05-12', 1, 2),
+(160, 16, 'Dia dos Namorados', '2024-06-12', 4, 2),
+(161, 17, 'Dia das Crianças', '2024-10-12', 7, 0),
+(162, 18, 'Dia dos Pais', '2024-08-11', 1, 2),
+(163, 1, 'Confraternização Universal(Ano Novo)', '2025-01-01', 4, -1),
+(164, 2, 'Paixão de Cristo', '2025-04-18', 6, 1),
+(165, 3, 'Páscoa', '2025-04-20', 1, 0),
+(166, 4, 'Tiradentes', '2025-04-21', 2, 0),
+(167, 5, 'Dia do Trabalho', '2025-05-01', 5, 0),
+(168, 6, 'Corpus Christi', '2025-06-19', 5, 0),
+(169, 7, 'Independência do Brasil', '2025-09-07', 1, 0),
+(170, 8, 'Nossa Senhora da Aparecida', '2025-10-12', 1, 0),
+(171, 9, 'Finados', '2025-11-02', 1, 0),
+(172, 10, 'Proclamação da República', '2025-11-15', 7, 0),
+(173, 11, 'Natal', '2025-12-25', 5, -1),
+(174, 12, 'Carnaval (Ponto Facultativo)', '2025-03-04', 3, 0),
+(175, 13, 'Domingo de Ramos', '2025-04-13', 1, 0),
+(176, 14, 'Sábado de Aleluia', '2025-04-19', 7, 0),
+(177, 15, 'Dia das Mães', '2025-05-11', 1, 2),
+(178, 16, 'Dia dos Namorados', '2025-06-12', 5, 2),
+(179, 17, 'Dia das Crianças', '2025-10-12', 1, 0),
+(180, 18, 'Dia dos Pais', '2025-08-10', 1, 2),
+(181, 1, 'Confraternização Universal(Ano Novo)', '2026-01-01', 5, -1),
+(182, 2, 'Paixão de Cristo', '2026-04-03', 6, 1),
+(183, 3, 'Páscoa', '2026-04-05', 1, 0),
+(184, 4, 'Tiradentes', '2026-04-21', 3, 0),
+(185, 5, 'Dia do Trabalho', '2026-05-01', 6, 1),
+(186, 6, 'Corpus Christi', '2026-06-04', 5, 0),
+(187, 7, 'Independência do Brasil', '2026-09-07', 2, 0),
+(188, 8, 'Nossa Senhora da Aparecida', '2026-10-12', 2, 0),
+(189, 9, 'Finados', '2026-11-02', 2, 0),
+(190, 10, 'Proclamação da República', '2026-11-15', 1, 0),
+(191, 11, 'Natal', '2026-12-15', 3, -1),
+(192, 12, 'Carnaval (Ponto Facultativo)', '2026-02-17', 3, 0),
+(193, 13, 'Domingo de Ramos', '2026-03-29', 1, 0),
+(194, 14, 'Sábado de Aleluia', '2026-04-04', 7, 0),
+(195, 15, 'Dia das Mães', '2026-05-10', 1, 2),
+(196, 16, 'Dia dos Namorados', '2026-06-12', 6, 2),
+(197, 17, 'Dia das Crianças', '2026-10-12', 2, 0),
+(198, 18, 'Dia dos Pais', '2026-08-09', 1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ESTABELECIMENTO`
+--
+
+CREATE TABLE IF NOT EXISTS `ESTABELECIMENTO` (
+  `COD_ESTABELECIMENTO` int(11) NOT NULL AUTO_INCREMENT,
+  `DIA_SEMANA` varchar(15) NOT NULL,
+  `HORA_ABERTURA` time DEFAULT NULL,
+  `HORA_FECHAMENTO` time DEFAULT NULL,
+  `FECHADO` int(1) DEFAULT NULL,
+  PRIMARY KEY (`COD_ESTABELECIMENTO`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `ESTABELECIMENTO`
+--
+
+INSERT INTO `ESTABELECIMENTO` (`COD_ESTABELECIMENTO`, `DIA_SEMANA`, `HORA_ABERTURA`, `HORA_FECHAMENTO`, `FECHADO`) VALUES
+(1, 'SEGUNDA-FEIRA', '10:00:00', '23:00:00', 0),
+(2, 'TERÇA-FEIRA', '10:00:00', '23:00:00', 0),
+(3, 'QUARTA-FEIRA', '10:00:00', '23:00:00', 0),
+(4, 'QUINTA-FEIRA', '10:00:00', '23:00:00', 0),
+(5, 'SEXTA-FEIRA', '10:00:00', '23:00:00', 0),
+(6, 'SÁBADO', '10:00:00', '23:59:00', 0),
+(7, 'DOMINGO', '10:00:00', '22:00:00', 0),
+(8, 'FERIADO', '10:00:00', '22:00:00', 0),
+(9, 'VÉSPERA', '10:00:00', '23:59:00', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `MESA`
+--
+
+CREATE TABLE IF NOT EXISTS `MESA` (
+  `COD_MESA` int(11) NOT NULL AUTO_INCREMENT,
+  `NUM_MESA` int(10) DEFAULT NULL,
+  `CAPACIDADE` int(11) DEFAULT NULL,
+  `STATUS_MESA` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`COD_MESA`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `MESA`
+--
+
+INSERT INTO `MESA` (`NUM_MESA`, `CAPACIDADE`, `STATUS_MESA`) VALUES
+(1, 4,'Ativa - Ocupada'),
+(2, 8,'Ativa - Livre'),
+(3, 8,'Ativa - Livre'),
+(5, 4, 'Ativa - Livre'),
+(6, 10, 'Ativa - Livre'),
+(7, 8, 'Ativa - Livre'),
+(8, 6, 'Ativa - Livre'),
+(9, 6, 'Ativa - Livre'),
+(10, 10, 'Ativa - Livre');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `MESA_ATENDIMENTO`
+--
+
+CREATE TABLE IF NOT EXISTS `MESA_ATENDIMENTO` (
+  `COD_MESA_ATENDIMENTO` int(11) NOT NULL AUTO_INCREMENT,
+  `COD_MESA` int(11) NOT NULL,
+  `COD_ATENDIMENTO` int(11) NOT NULL,
+  PRIMARY KEY (`COD_MESA_ATENDIMENTO`),
+  KEY `FK_MESA` (`COD_MESA`),
+  KEY `FK_ATENDIMENTO` (`COD_ATENDIMENTO`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `RESERVA`
+--
+
+CREATE TABLE IF NOT EXISTS `RESERVA` (
+  `COD_RESERVA` int(11) NOT NULL AUTO_INCREMENT,
+  `STATUS_RESERVA` char(50) DEFAULT NULL,
+  `DATA_RESERVA` date DEFAULT NULL,
+  `CPF` char(15) DEFAULT NULL,
+  `COD_CATEGORIA` int(11) NOT NULL,
+  `TELEFONE` char(12) DEFAULT NULL,
+  `QTD_PESSOAS` int(11) DEFAULT NULL,
+  `PAGAMENTO` varchar(30) DEFAULT NULL,
+  `COMPROVANTE` longtext,
+  `HORA_RESERVA` datetime NOT NULL,
+  `NOME_RESPONSAVEL` varchar(50) NOT NULL,
+  `EMAIL` varchar(50) NOT NULL,
+  `DIA_SEMANA` int(1) NOT NULL,
+  `HORA_PREVISAO_TERMINO` datetime NOT NULL,
+  PRIMARY KEY (`COD_RESERVA`),
+  KEY `DIA_SEMANA` (`DIA_SEMANA`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `RESERVA_ATENDIMENTO`
+--
+
+CREATE TABLE IF NOT EXISTS `RESERVA_ATENDIMENTO` (
+  `COD_RESERVA_ATENDIMENTO` int(11) NOT NULL AUTO_INCREMENT,
+  `COD_RESERVA` int(11) NOT NULL,
+  `COD_ATENDIMENTO` int(11) NOT NULL,
+  PRIMARY KEY (`COD_RESERVA_ATENDIMENTO`),
+  KEY `FK_COD_ATENDIMENTO` (`COD_ATENDIMENTO`),
+  KEY `FK_COD_RESERVA` (`COD_RESERVA`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Constraints for table `MESA_ATENDIMENTO`
+--
+ALTER TABLE `MESA_ATENDIMENTO`
+  ADD CONSTRAINT `FK_ATENDIMENTO` FOREIGN KEY (`COD_ATENDIMENTO`) REFERENCES `ATENDIMENTO` (`COD_ATENDIMENTO`),
+  ADD CONSTRAINT `FK_MESA` FOREIGN KEY (`COD_MESA`) REFERENCES `MESA` (`cod_mesa`);
+
+--
+-- Constraints for table `RESERVA_ATENDIMENTO`
+--
+ALTER TABLE `RESERVA_ATENDIMENTO`
+  ADD CONSTRAINT `FK_COD_ATENDIMENTO` FOREIGN KEY (`COD_ATENDIMENTO`) REFERENCES `ATENDIMENTO` (`COD_ATENDIMENTO`),
+  ADD CONSTRAINT `FK_COD_RESERVA` FOREIGN KEY (`COD_RESERVA`) REFERENCES `RESERVA` (`COD_RESERVA`);
+  
+  
+ALTER TABLE `ATENDIMENTO`
+  ADD CONSTRAINT `FK_ATENDIMENTO_CATEG` FOREIGN KEY (`COD_CATEGORIA`) REFERENCES `CATEGORIA` (`COD_CATEGORIA`);
+
+
+ALTER TABLE `RESERVA`
+  ADD CONSTRAINT `FK_RESERVA_CATEG` FOREIGN KEY (`COD_CATEGORIA`) REFERENCES `CATEGORIA` (`COD_CATEGORIA`);
+
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE PROCEDURE `CADASTRAR_MESAS`(IN `NUM_MESA_VAR` INT, IN `CAPACIDADE_VAR` INT, IN `STATUS_MESA_VAR` VARCHAR(20))
+    NO SQL
+BEGIN
+	SET @NUM_MESA = NUM_MESA_VAR;
+    SET @CAPACIDADE = CAPACIDADE_VAR;
+    SET @STATUS_MESA = STATUS_MESA_VAR;
+    
+    INSERT INTO MESA (NUM_MESA,CAPACIDADE,STATUS_MESA) VALUES(@NUM_MESA,@CAPACIDADE,@STATUS_MESA);
+END$$
+
+CREATE PROCEDURE `CANCELAR_ATENDIMENTO`(IN `COD_ATENDIMENTO` INT)
+    NO SQL
+BEGIN
+	
+    SET @COD_ATENDIMENTO = COD_ATENDIMENTO;
+    
+    UPDATE ATENDIMENTO 
+    SET STATUS_ATENDIMENTO = 'Cancelado'
+    WHERE COD_ATENDIMENTO = @COD_ATENDIMENTO;
+END$$
+
+CREATE  PROCEDURE `CHECKIN_RESERVA`(IN `COD_CATEGORIA_VAR` INT, IN `NOME_RESPONSAVEL_VAR` VARCHAR(100), IN `STATUS_ATENDIMENTO_VAR` VARCHAR(50), IN `TELEFONE_VAR` VARCHAR(15), IN `COD_RESERVA_VAR` INT, IN `QTD_PESSOAS_VAR` INT)
+    NO SQL
+BEGIN
+            SET @COD_CATEGORIA = COD_CATEGORIA_VAR;
+            SET @HORA_CHECKIN = CURRENT_TIMESTAMP;
+            SET @NOME_RESPONSAVEL = NOME_RESPONSAVEL_VAR;
+            SET @DATA_EVENTO = CURRENT_DATE();
+            SET @STATUS_ATENDIMENTO = STATUS_ATENDIMENTO_VAR;
+            SET @TELEFONE = TELEFONE_VAR;
+            SET @COD_RESERVA = COD_RESERVA_VAR;
+            SET @QTD_PESSOAS = QTD_PESSOAS_VAR;
+            SET @DIA_SEMANA = (DAYOFWEEK(@DATA_EVENTO));
+
+
+INSERT INTO ATENDIMENTO (COD_CATEGORIA,HORA_CHECKIN,NOME_RESPONSAVEL,DATA_EVENTO,STATUS_ATENDIMENTO,TELEFONE,COD_RESERVA,QTD_PESSOAS,DIA_SEMANA)
+                  VALUES(@COD_CATEGORIA,@HORA_CHECKIN,@NOME_RESPONSAVEL,@DATA_EVENTO,@STATUS_ATENDIMENTO,@TELEFONE,@COD_RESERVA,@QTD_PESSOAS,@DIA_SEMANA);
+
+
+			SET @COD_ATENDIMENTO = (SELECT COD_ATENDIMENTO FROM ATENDIMENTO ORDER BY COD_ATENDIMENTO DESC LIMIT 1);
+			
+ 
+
+INSERT INTO RESERVA_ATENDIMENTO (COD_RESERVA,COD_ATENDIMENTO) VALUES (@COD_RESERVA,@COD_ATENDIMENTO);
+
+
+END$$
+
+CREATE   PROCEDURE `DESATIVA_MESA`(IN `NUM_MESA` INT)
+    NO SQL
+UPDATE MESA
+SET STATUS_MESA = 'C'
+WHERE NUM_MESA = @NUM_MESA AND STATUS_MESA = 'A'$$
+
+CREATE  PROCEDURE `EFETUAR_CHECKIN`(IN `COD_CATEGORIA_VAR` INT, IN `NOME_RESPONSAVEL_VAR` VARCHAR(30), IN `STATUS_ATENDIMENTO_VAR` VARCHAR(50), IN `TELEFONE_VAR` VARCHAR(15), IN `QTD_PESSOAS_VAR` INT)
+    NO SQL
+BEGIN
+   
+            SET @COD_CATEGORIA = COD_CATEGORIA_VAR;
+            SET @HORA_CHECKIN =  CURRENT_TIMESTAMP;
+            SET @NOME_RESPONSAVEL = NOME_RESPONSAVEL_VAR;
+            SET @DATA_EVENTO = CURRENT_DATE();
+            SET @STATUS_ATENDIMENTO = STATUS_ATENDIMENTO_VAR;
+            SET @TELEFONE = TELEFONE_VAR;
+            SET @QTD_PESSOAS = QTD_PESSOAS_VAR;
+            SET @DIA_SEMANA = (DAYOFWEEK(@DATA_EVENTO));
+
+
+
+INSERT INTO ATENDIMENTO (COD_CATEGORIA,HORA_CHECKIN,NOME_RESPONSAVEL,DATA_EVENTO,STATUS_ATENDIMENTO,TELEFONE,QTD_PESSOAS,DIA_SEMANA)
+       VALUES(@COD_CATEGORIA,@HORA_CHECKIN,@NOME_RESPONSAVEL,@DATA_EVENTO,@STATUS_ATENDIMENTO,@TELEFONE,@QTD_PESSOAS,@DIA_SEMANA);
+
+END$$
+
+CREATE   PROCEDURE `EFETUAR_CHECKOUT`(IN `COD_ATENDIMENTO_VAR` INT, IN `STATUS_MESA_VAR` VARCHAR(50), IN `STATUS_ATENDIMENTO_VAR` VARCHAR(50))
+    NO SQL
+BEGIN
+
+    
+    SET @COD_ATENDIMENTO = COD_ATENDIMENTO_VAR;
+    SET @STATUS_MESA = STATUS_MESA_VAR;
+    SET @STATUS_ATENDIMENTO = STATUS_ATENDIMENTO_VAR;
+    SET @COD_MESA = (SELECT DISTINCT COD_MESA FROM MESA_ATENDIMENTO WHERE COD_ATENDIMENTO = @COD_ATENDIMENTO);
+    SET @HORA_CHECKOUT = CURRENT_TIMESTAMP;
+    
+    UPDATE ATENDIMENTO
+    SET STATUS_ATENDIMENTO = @STATUS_ATENDIMENTO,
+    HORA_CHECKOUT = @HORA_CHECKOUT
+    WHERE COD_ATENDIMENTO = @COD_ATENDIMENTO;
+    
+
+    UPDATE MESA 
+    SET STATUS_MESA = @STATUS_MESA
+    WHERE COD_MESA = @COD_MESA;
+
+	SET @COD_RESERVA = (SELECT COD_RESERVA FROM ATENDIMENTO WHERE COD_ATENDIMENTO = @COD_ATENDIMENTO);
+    
+    UPDATE RESERVA
+    SET STATUS_RESERVA = @STATUS_ATENDIMENTO
+    WHERE COD_RESERVA = @COD_RESERVA;
+    
+    
+    
+  SELECT 'PROCESSADO COM SUCESSO';
+    
+  
+END$$
+
+CREATE  PROCEDURE `INICIAR_ATENDIMENTO`(IN `COD_MESA_VAR` INT, IN `COD_ATENDIMENTO_VAR` INT, IN `STATUS_MESA_VAR` VARCHAR(50), IN `STATUS_ATENDIMENTO_VAR` VARCHAR(50), IN `PREVISAO_CHECKOUT_VAR` VARCHAR(10))
+    NO SQL
+BEGIN
+
+    SET @COD_MESA = COD_MESA_VAR;
+    SET @COD_ATENDIMENTO = COD_ATENDIMENTO_VAR;
+    SET @STATUS_MESA = STATUS_MESA_VAR;
+    SET @STATUS_ATENDIMENTO = STATUS_ATENDIMENTO_VAR;
+    
+    INSERT MESA_ATENDIMENTO (COD_MESA,COD_ATENDIMENTO) VALUES (@COD_MESA,@COD_ATENDIMENTO);
+    
+    SET @HORA_ATENDIMENTO = CURRENT_TIMESTAMP;
+
+     
+    
+    UPDATE ATENDIMENTO
+    SET STATUS_ATENDIMENTO = @STATUS_ATENDIMENTO,
+    HORA_ATENDIMENTO = @HORA_ATENDIMENTO,
+    PREVISAO_CHECKOUT = (SELECT ADDTIME(current_timestamp(),PREVISAO_CHECKOUT_VAR))
+    WHERE COD_ATENDIMENTO = @COD_ATENDIMENTO;
+    
+    
+    UPDATE MESA 
+    SET STATUS_MESA = @STATUS_MESA
+    WHERE COD_MESA = @COD_MESA;
+    
+    
+ SELECT 'Processado com sucesso';
+    
+  
+END$$
+
+CREATE  PROCEDURE `LISTA_TEMPO_ATENDIMENTO_CATEGORIA`(IN `CATEGORIA_VAR` INT)
+    NO SQL
+BEGIN
+	SELECT TIMEDIFF(HORA_CHECKOUT,HORA_ATENDIMENTO)FROM ATENDIMENTO WHERE COD_CATEGORIA = CATEGORIA_VAR AND (HORA_ATENDIMENTO IS NOT NULL OR HORA_CHECKOUT IS NOT NULL);
+END$$
+
+CREATE   PROCEDURE `LISTA_TEMPO_ATENDIMENTO_DIA_SEMANA`(IN `DIA_SEMANA_VAR` INT)
+    NO SQL
+BEGIN
+	SELECT TIMEDIFF(HORA_CHECKOUT,HORA_ATENDIMENTO)FROM ATENDIMENTO WHERE DIA_SEMANA = DIA_SEMANA_VAR AND (HORA_ATENDIMENTO IS NOT NULL OR HORA_CHECKOUT IS NOT NULL);
+END$$
+
+CREATE   PROCEDURE `LISTA_PREVISAO_CHECKOUT_DATA`(IN `DATA_VAR` DATE)
+    NO SQL
+BEGIN
+	SELECT TIMEDIFF(PREVISAO_CHECKOUT,HORA_ATENDIMENTO)FROM ATENDIMENTO WHERE DATA_EVENTO = DATA_VAR AND (HORA_ATENDIMENTO IS NOT NULL OR PREVISAO_CHECKOUT IS NOT NULL);
+END$$
+
+
+CREATE   PROCEDURE `QUANTIDADE_RESERVAS`(IN `CATEGORIA_VAR` VARCHAR(30), IN `DATA_VAR` DATE, IN `HORA_INICIO_VAR` TIME)
+    NO SQL
+BEGIN
+
+
+	SET @CATEGORIA = CATEGORIA_VAR;
+
+
+     SET @MEDIA = (SELECT avg((TIME_TO_SEC(HORA_CHECKOUT) - TIME_TO_SEC(HORA_ATENDIMENTO))) FROM ATENDIMENTO WHERE TIPO_EVENTO = @CATEGORIA );
+
+     SET @MEDIA_CALC = (SELECT (@MEDIA/60));
+
+
+
+	
+    
+    SET @VARIANCIA = (SELECT VARIANCE((TIME_TO_SEC(HORA_CHECKOUT) - TIME_TO_SEC(HORA_ATENDIMENTO))) FROM ATENDIMENTO WHERE TIPO_EVENTO = @CATEGORIA );
+    
+    SET @DESVIO_PADRAO = (SELECT  (SQRT(@VARIANCIA))/60);
+
+
+
+
+	SET @DATA = DATA_VAR;
+	SET @HORA_INICIO = HORA_INICIO_VAR;
+	
+
+	SELECT COUNT(*) AS 'QUANTIDADE DE RESERVAS'
+	FROM RESERVA R
+	WHERE R.DATA_RESERVA >=  @DATA
+	AND R.DATA_RESERVA <  @DATAVIO_PADRAO			
+	AND @HORA_INICIO  BETWEEN R.HORA_RESERVA  AND (R.HORA_RESERVA + @MEDIA_CALC + @DESVIO_PADRAO);
+
+END$$
+
+CREATE PROCEDURE `RELATORIO`(IN `DATA_INICIO_VAR` DATE, IN `DATA_FIM_VAR` DATE)
+    NO SQL
+BEGIN
+
+
+ SET @DATA_INICIO = DATA_INICIO_VAR;
+    SET @DATA_FIM = DATA_FIM_VAR;
+    
+ SELECT  
+COALESCE(A.DATA_EVENTO, R.DATA_RESERVA) AS 'DATA',  
+COALESCE(A.HORA_CHECKIN,'') AS 'CHECKIN',  
+COALESCE(A.HORA_ATENDIMENTO,'') AS 'ATENDIMENTO',  
+COALESCE(A.HORA_CHECKOUT,'') AS 'CHECKOUT', 
+COALESCE(A.QTD_PESSOAS,'') AS 'PESSOAS',  
+COALESCE(A.TELEFONE,'') AS 'TELEFONE',
+COALESCE(A.STATUS_ATENDIMENTO,'')'STATUS ATENDIMENTO',
+COALESCE(M.NUM_MESA,'') AS 'MESA UTILIZADA',
+COALESCE(C.NOME_CATEGORIA) AS 'CATEGORIA',
+COALESCE(R.NOME_RESPONSAVEL, A.NOME_RESPONSAVEL) AS 'CLIENTE', 
+COALESCE(R.COD_RESERVA, 'S/ RESERVA') AS 'CODIGO RESERVA', 
+COALESCE(R.PAGAMENTO, '') AS 'PAGAMENTO', 
+COALESCE(R.STATUS_RESERVA, '') AS 'STATUS RESERVA' 
+FROM ATENDIMENTO AS A 
+LEFT JOIN RESERVA_ATENDIMENTO AS RA ON A.COD_ATENDIMENTO = RA.COD_ATENDIMENTO 
+LEFT JOIN RESERVA AS R ON RA.COD_RESERVA = R.COD_RESERVA 
+LEFT JOIN MESA_ATENDIMENTO AS MA ON MA.COD_ATENDIMENTO = A.COD_ATENDIMENTO 
+LEFT JOIN MESA AS M ON MA.COD_MESA = M.COD_MESA 
+JOIN CATEGORIA AS C ON C.COD_CATEGORIA = A.COD_CATEGORIA
+              WHERE (A.DATA_EVENTO BETWEEN  @DATA_INICIO AND @DATA_FIM ) OR  (R.DATA_RESERVA BETWEEN @DATA_INICIO AND @DATA_FIM)
+
+UNION
+SELECT  
+COALESCE(A.DATA_EVENTO, R.DATA_RESERVA) AS DATA,  
+COALESCE(A.HORA_CHECKIN,'') AS 'CHECKIN',  
+COALESCE(A.HORA_ATENDIMENTO,'') AS 'ATENDIMENTO',  
+COALESCE(A.HORA_CHECKOUT,'') AS 'CHECKOUT',
+COALESCE(A.QTD_PESSOAS,'') AS 'PESSOAS',  
+COALESCE(A.TELEFONE,'') AS 'TELEFONE',  
+COALESCE(A.STATUS_ATENDIMENTO,'') AS 'STATUS ATENDIMENTO',  
+COALESCE(M.NUM_MESA,'') AS 'MESA UTILIZADA',  
+COALESCE(C.NOME_CATEGORIA)  AS 'CATEGORIA', 
+COALESCE(R.NOME_RESPONSAVEL, A.NOME_RESPONSAVEL) AS 'CLIENTE', 
+COALESCE(R.COD_RESERVA,'S/ RESERVA') AS 'CODIGO RESERVA', 
+COALESCE(R.PAGAMENTO, '') AS 'PAGAMENTO',  
+COALESCE(R.STATUS_RESERVA, '') AS 'STATUS RESERVA' 
+FROM RESERVA AS R LEFT JOIN  RESERVA_ATENDIMENTO AS RA ON R.COD_RESERVA = RA.COD_RESERVA
+      LEFT JOIN ATENDIMENTO AS A ON A.COD_ATENDIMENTO = RA.COD_ATENDIMENTO 
+                  LEFT JOIN MESA_ATENDIMENTO AS MA ON MA.COD_ATENDIMENTO = A.COD_ATENDIMENTO LEFT JOIN MESA AS M ON MA.COD_MESA = M.COD_MESA 
+                  JOIN CATEGORIA AS C ON C.COD_CATEGORIA = R.COD_CATEGORIA
+                  WHERE (A.DATA_EVENTO BETWEEN  @DATA_INICIO AND @DATA_FIM ) OR  (R.DATA_RESERVA BETWEEN @DATA_INICIO AND @DATA_FIM)
+      ORDER BY 1, 2;
+END$$
+
+CREATE  PROCEDURE `RESERVAS_IMPACTANTES`(IN `DATA_RESERVA_NOVA_VAR` DATE, IN `HORA_RESERVA_NOVA_VAR` DATETIME, IN `HORA_RESERVA_NOVA_PREVISAO_VAR` DATETIME)
+    NO SQL
+BEGIN
+
+SET @DATA_RESERVA_NOVA = DATA_RESERVA_NOVA_VAR;
+
+CREATE TEMPORARY TABLE RESERVA_TEMP SELECT * FROM RESERVA
+WHERE DATA_RESERVA >= @DATA_RESERVA_NOVA AND DATA_RESERVA <= @DATA_RESERVA_NOVA
+AND STATUS_RESERVA = 'Reservada';
+
+SET @HORA_RESERVA_NOVA = HORA_RESERVA_NOVA_VAR;
+SET @HORA_RESERVA_NOVA_PREVISAO = HORA_RESERVA_NOVA_PREVISAO_VAR;
+SELECT R.COD_RESERVA,
+C.NOME_CATEGORIA,
+R.QTD_PESSOAS,
+R.HORA_RESERVA,
+R.HORA_PREVISAO_TERMINO
+FROM RESERVA_TEMP R
+JOIN CATEGORIA C ON C.COD_CATEGORIA = R.COD_CATEGORIA
+WHERE @HORA_RESERVA_NOVA BETWEEN HORA_RESERVA AND HORA_PREVISAO_TERMINO
+OR @HORA_RESERVA_NOVA_PREVISAO BETWEEN HORA_RESERVA AND HORA_PREVISAO_TERMINO;
+
+DROP TABLE RESERVA_TEMP;
+
+
+END$$
+
+DELIMITER ;
+
+
